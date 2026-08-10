@@ -60,7 +60,7 @@ RUN_CATEGORY_MAPPING = True
 # comfortably under eBay's rate limit (commonly ~5,000/day on the default
 # Browse API tier - check your exact allowance in the eBay Developer Portal
 # and adjust this if yours differs).
-EBAY_DAILY_CALL_BUDGET = int(os.getenv("EBAY_DAILY_CALL_BUDGET") or "4000")
+EBAY_DAILY_CALL_BUDGET = int(os.getenv("EBAY_DAILY_CALL_BUDGET") or "1500")
 
 # How many times this workflow runs per day - keep in sync with the cron
 # schedule in .github/workflows/run.yml (currently every 3 hours = 8/day).
