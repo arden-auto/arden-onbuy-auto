@@ -58,7 +58,7 @@ jobs:
           SHEET_NAME: ${{ vars.SHEET_NAME }}
           # Batch size scales automatically from these two - RUNS_PER_DAY
           # must match the cron above (every 3h = 8/day).
-          EBAY_DAILY_CALL_BUDGET: ${{ vars.EBAY_DAILY_CALL_BUDGET }}
+          EBAY_DAILY_CALL_BUDGET: ${{ vars.EBAY_DAILY_CALL_BUDGET || '1500' }}
           RUNS_PER_DAY: ${{ vars.RUNS_PER_DAY || '12' }}
           MAX_PRODUCTS_PER_RUN: ${{ inputs.max_products || vars.MAX_PRODUCTS_PER_RUN }}
           REFRESH_ALL: ${{ inputs.refresh_all }}
