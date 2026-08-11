@@ -60,6 +60,7 @@ jobs:
           # must match the cron above (every 3h = 8/day).
           EBAY_DAILY_CALL_BUDGET: ${{ vars.EBAY_DAILY_CALL_BUDGET || '1500' }}
           RUNS_PER_DAY: ${{ vars.RUNS_PER_DAY || '12' }}
+          EXCLUDED_SUPPLIERS: ${{ vars.EXCLUDED_SUPPLIERS }}
           MAX_PRODUCTS_PER_RUN: ${{ inputs.max_products || vars.MAX_PRODUCTS_PER_RUN }}
           REFRESH_ALL: ${{ inputs.refresh_all }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
