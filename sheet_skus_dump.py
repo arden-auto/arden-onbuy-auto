@@ -10,13 +10,16 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 SHEET_NAME = os.getenv("SHEET_NAME") or "Arden_Feed_Master"
+SHEET_ID = (os.getenv("SHEET_ID") or "").strip()  # takes precedence: exact spreadsheet by key
 
 
 def main():
     creds = ServiceAccountCredentials.from_json_keyfile_dict(
         json.loads(os.environ["GOOGLE_CREDENTIALS"]),
         ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"])
-    book = gspread.authorize(creds).open(SHEET_NAME)
+    client = gspread.authorize(creds)
+    book = client.open_by_key(SHEET_ID) if SHEET_ID else client.open(SHEET_NAME)
+    print(f"spreadsheet: {book.title}")
     for tab in book.worksheets():
         headers = [str(x).strip() for x in tab.row_values(1)]
         if "SKU" not in headers:
