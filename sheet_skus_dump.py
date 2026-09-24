@@ -22,16 +22,22 @@ def main():
     print(f"spreadsheet: {book.title}")
     for tab in book.worksheets():
         headers = [str(x).strip() for x in tab.row_values(1)]
+        print(f"TAB {tab.title} HEADERS: {headers}")
         if "SKU" not in headers:
             print(f"TAB {tab.title}: no SKU column")
             continue
-        vals = [str(v).replace(",", "").strip() for v in tab.col_values(headers.index("SKU") + 1)[1:]]
-        vals = [v for v in vals if v]
-        print(f"TAB {tab.title}: {len(vals)} SKU(s)")
-        print(f"BEGIN-SKUS {tab.title}")
-        for v in vals:
-            print(v)
-        print(f"END-SKUS {tab.title}")
+        # SKU plus every identifier-ish column - the OnBuy listings may be
+        # keyed by a barcode/decorated value rather than this sheet's SKU.
+        wanted = ["SKU"] + [h for h in headers if h != "SKU" and any(
+            k in h.lower() for k in ("ean", "gtin", "barcode", "product code", "onbuy"))]
+        for col in wanted:
+            vals = [str(v).replace(",", "").strip() for v in tab.col_values(headers.index(col) + 1)[1:]]
+            vals = [v for v in vals if v]
+            print(f"TAB {tab.title} COLUMN {col}: {len(vals)} value(s)")
+            print(f"BEGIN-COL {tab.title}|{col}")
+            for v in vals:
+                print(v)
+            print(f"END-COL {tab.title}|{col}")
 
 
 if __name__ == "__main__":
