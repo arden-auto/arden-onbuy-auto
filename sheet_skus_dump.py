@@ -29,7 +29,7 @@ def main():
         # SKU plus every identifier-ish column - the OnBuy listings may be
         # keyed by a barcode/decorated value rather than this sheet's SKU.
         wanted = ["SKU"] + [h for h in headers if h != "SKU" and any(
-            k in h.lower() for k in ("ean", "gtin", "barcode", "product code", "onbuy"))]
+            k in h.lower() for k in ("ean", "gtin", "barcode", "product code", "onbuy", "brand"))]
         for col in wanted:
             vals = [str(v).replace(",", "").strip() for v in tab.col_values(headers.index(col) + 1)[1:]]
             vals = [v for v in vals if v]
@@ -38,6 +38,14 @@ def main():
             for v in vals:
                 print(v)
             print(f"END-COL {tab.title}|{col}")
+        # Row-wise correlation lines - the per-column dumps drop empties, so
+        # they cannot say which EAN belongs to which brand or SKU.
+        for idx, r in enumerate(tab.get_all_records()):
+            sku = str(r.get("SKU") or "").replace(",", "").strip()
+            ean = str(r.get("EAN") or "").replace(",", "").strip()
+            br = str(r.get("Brand") or "").strip()
+            if sku or ean:
+                print(f"ROW|{tab.title}|{idx + 2}|{sku}|{ean}|{br}")
 
 
 if __name__ == "__main__":
